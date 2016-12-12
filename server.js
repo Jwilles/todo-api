@@ -53,6 +53,34 @@ app.delete('/todos/:id', function (req,res) {
 	res.send(matchedTodo);		
 });
 
+//PUT /todos/:id
+app.put('/todos/:id', function(req, res) {
+	var body = _.pick(req.body, 'description', 'completed');
+	var matchedTodo = _.findWhere(todos, {id: parseInt(req.params.id, 10) });	
+	console.log(matchedTodo)
+	var validAttributes = {};
+
+	if (!matchedTodo) {
+		return res.status(404).send();
+	}
+	
+	if (body.hasOwnProperty('completed') && _.isBoolean(body.completed)) {
+		validAttributes.completed = body.completed;
+	} else if (body.hasOwnProperty('completed')) {
+		return res.status(400).send();	
+	}
+
+	if (body.hasOwnProperty('description') && _.isString(body.completed) && !body.description.trim().length === 0) {
+		validAttributes.description = body.description;
+	} else if (body.hasOwnProperty('description')) {
+		return res.status(400).send();	
+	} 
+	
+	 _.extend(matchedTodo, validAttributes);
+//	todos[todos.indexOf(matchedTodo)] = updatedTodo;
+	res.json(body); 
+
+});
 
 app.listen(PORT, function () {
 	console.log('Server started on port: ' + PORT);
