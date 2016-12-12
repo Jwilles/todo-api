@@ -23,7 +23,7 @@ app.get('/todos/:id', function (req, res) {
 	var matchedTodo = _.findWhere(todos, {id: parseInt(req.params.id, 10)});
 
 	if (!matchedTodo) {
-		res.status(404).send('404 page not found');
+	 res.status(404).send('404 page not found');
 	} else {
 		res.json(matchedTodo);
 	}
@@ -41,6 +41,18 @@ app.post('/todos', function (req,res) {
 	todos.push(body);
 	res.json(body);
 });
+
+//DELETE /todos/:id
+app.delete('/todos/:id', function (req,res) {
+	var matchedTodo = _.findWhere(todos,{ id: parseInt(req.params.id, 10)});
+	if (!matchedTodo) {
+		return res.status(400).send();
+	}
+	todos.splice(todos.indexOf(matchedTodo), 1);
+
+	res.send(matchedTodo);		
+});
+
 
 app.listen(PORT, function () {
 	console.log('Server started on port: ' + PORT);
