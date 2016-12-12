@@ -15,7 +15,19 @@ app.get('/', function (req, res) {
 
 // GET /todos
 app.get('/todos', function (req, res) {
-	res.json(todos);
+	var queryParams =req.query;
+	var filteredTodos = todos;
+	
+	if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'true') {
+		filteredTodos  = _.where(todos, { completed: true})
+	} else if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'false') {
+			filteredTodos  = _.where(todos, { completed: false})
+	}
+	if (!filteredTodos) {
+		return res.status(400).send();
+	} 
+
+	res.json(filteredTodos);
 });
 
 // GET /todos/:id
@@ -57,7 +69,6 @@ app.delete('/todos/:id', function (req,res) {
 app.put('/todos/:id', function(req, res) {
 	var body = _.pick(req.body, 'description', 'completed');
 	var matchedTodo = _.findWhere(todos, {id: parseInt(req.params.id, 10) });	
-	console.log(matchedTodo)
 	var validAttributes = {};
 
 	if (!matchedTodo) {
