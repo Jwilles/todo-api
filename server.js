@@ -33,39 +33,11 @@ app.get('/todos', function (req, res) {
 		if (!todos) {
 			return res.status(404).send();
 		}	
-	//	console.log(todos)	
 		return res.json(todos);	
 	}, function (e) {
 		res.status(500).send();
 	});	
 
-//		return Todo.findAll({
-//			where: {
-//				description: {
-//					$like: '%Mail%'
-//				}
-//			}	
-//		})
-//	var filteredTodos = todos;
-//	
-//	if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'true') {
-//		filteredTodos  = _.where(todos, { completed: true})
-//	} else if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'false') {
-//			filteredTodos  = _.where(todos, { completed: false})
-//	}
-//
-//	if (queryParams.hasOwnProperty('q') && queryParams.q.length > 0) {
-//		filteredTodos  = _.filter(todos, function (todo) {
-//				return todo.description.toLowerCase().indexOf(queryParams.q.toLowerCase()) > -1;
-//		});
-//	}
-//
-//
-//	if (!filteredTodos) {
-//		return res.status(400).send();
-//	} 
-//
-//	res.json(filteredTodos);
 });
 
 // GET /todos/:id
