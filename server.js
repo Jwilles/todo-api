@@ -58,12 +58,27 @@ app.get('/todos/:id', middleware.requireAuthentication, function (req, res) {
 //POST /todos
 app.post('/todos', middleware.requireAuthentication, function (req,res) {
 	var body = _.pick(req.body, 'description', 'completed');
-
+	 
+	
 	db.todo.create(body).then(function (todo) {
-		res.json(todo.toJSON());
+		req.user.addTodo(todo).then(function () {
+			return todo.reload();
+		}).then(function (todo) {
+			res.json(todo.toJSON());
+		});
 	}, function (error) {
 		res.status(400).json(error);
 	});
+
+//	var token = req.get('Auth');
+//
+//	db.user.findByToken(token).then(function (user) {
+//		req.user = user;
+//		next();
+//	}, function () {
+//		res.status(401).send();
+//	});
+
 	
 });
 
